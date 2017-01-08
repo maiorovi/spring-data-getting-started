@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceProvider;
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories
@@ -48,10 +49,14 @@ public class JpaContext {
 		vendorAdapter.setShowSql(true);
 		vendorAdapter.setDatabasePlatform("org.hibernate.dialect.MySQLDialect");
 
+		Properties properties = new Properties();
+		properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
 		factory.setPackagesToScan("jpa_example.app");
 		factory.setDataSource(dataSource);
+		factory.setJpaProperties(properties);
 		factory.afterPropertiesSet();
 //		factory.setPersistenceProvider(HibernatePersistenceProvider.class);
 
